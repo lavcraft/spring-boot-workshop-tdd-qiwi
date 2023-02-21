@@ -1,15 +1,12 @@
 package com.governance.embassy;
 
+import com.governance.embassy.service.HttpClientProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import static org.springframework.http.ResponseEntity.ok;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
+@EnableConfigurationProperties(HttpClientProperties.class)
 public class EmbassyServiceApplication {
 
     public static void main(String[] args) {
