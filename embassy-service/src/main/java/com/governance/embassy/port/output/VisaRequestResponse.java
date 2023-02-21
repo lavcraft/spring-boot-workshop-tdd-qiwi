@@ -4,8 +4,8 @@ import lombok.*;
 
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class VisaRequestResponse {
     String ticketId;
 }

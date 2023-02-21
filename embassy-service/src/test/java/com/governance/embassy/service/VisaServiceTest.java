@@ -29,13 +29,11 @@ public class VisaServiceTest {
 
         when(template.postForEntity("http://my-visa-agent:8081/visa/request", request, VisaRequestResponse.class)).thenReturn(ResponseEntity.ok(VisaRequestResponse.builder().ticketId("T-1234").build()));
 
-//        when(template.postForEntity("http://my-visa-agent:8081/visa/request", request, VisaRequestResponse.class)).thenReturn(ResponseEntity.ok(VisaRequestResponse.builder().ticketId("T-1234").build()));
-
         //when
         VisaRequestResponse response = visaService.createRequest("U-1234");
 
         //then
-        assertThat(response)
+        assertThat(response.getTicketId())
                 .isEqualTo("T-1234")
                 .describedAs("ticket id should be T-1234 b ecause http client return it for user U-1234");
     }

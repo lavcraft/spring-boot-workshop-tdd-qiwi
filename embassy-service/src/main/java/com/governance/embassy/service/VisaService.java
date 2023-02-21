@@ -3,6 +3,7 @@ package com.governance.embassy.service;
 import com.governance.embassy.port.input.VisaStatusResponse;
 import com.governance.embassy.port.output.VisaRequestResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,12 +18,16 @@ public class VisaService {
         ResponseEntity<VisaRequestResponse> visaRequestResponseResponseEntity = visaServiceRestTemplate.postForEntity(httpClientProperties.getVisaAgentBaseEndpoint() + "/visa/request", VisaRequest.builder().userId(userId).build(), VisaRequestResponse.class);
 
         VisaRequestResponse body = visaRequestResponseResponseEntity.getBody();
-        System.out.println("Receive ticket with id : " + body.getTicketId());
 
         return body;
     }
 
+    @Cacheable("visa-status")
     public VisaStatusResponse getStatus(String ticketId) {
-        return null;
+        ResponseEntity<VisaStatusResponse> visaRequestResponseResponseEntity = visaServiceRestTemplate.getForEntity(httpClientProperties.getVisaAgentBaseEndpoint() + "/visa/status?ticketId="+ ticketId, VisaStatusResponse.class);
+
+        VisaStatusResponse body = visaRequestResponseResponseEntity.getBody();
+
+        return body;
     }
 }
