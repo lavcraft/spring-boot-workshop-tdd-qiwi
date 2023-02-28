@@ -106,4 +106,15 @@ class VisaServiceCacheableTest {
         //then
         assertThat(expectedFailed.getStatus()).isEqualTo("failed");
     }
+
+    public static class TT {
+        @Bean
+        public RestTemplate restTemplate() {
+            return mock(
+                    RestTemplate.class,
+                    withSettings()
+                            .defaultAnswer(Answers.RETURNS_DEEP_STUBS)
+            );
+        }
+    }
 }

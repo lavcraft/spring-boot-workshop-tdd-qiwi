@@ -3,6 +3,7 @@ package com.governance.embassy.service;
 import com.governance.embassy.port.output.HttpClientVisaRequestResponse;
 import com.governance.embassy.port.output.HttpClientVisaStatusResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
