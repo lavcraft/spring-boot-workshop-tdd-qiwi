@@ -1,11 +1,12 @@
 package com.governance.embassy.port.output;
 
+
 import lombok.*;
 
 @Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-@RequiredArgsConstructor
-public class VisaRequestResponse {
-    String ticketId;
+public class HttpClientVisaStatusResponse {
+    String status;
 }

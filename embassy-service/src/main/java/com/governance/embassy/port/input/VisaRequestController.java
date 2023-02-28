@@ -1,5 +1,6 @@
 package com.governance.embassy.port.input;
 
+import com.governance.embassy.port.output.HttpClientVisaRequestResponse;
 import com.governance.embassy.service.VisaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class VisaRequestController {
 
     @GetMapping("/request")
     public ResponseEntity<VisaRequestResponse> createRequest(@RequestParam String userId) {
-        com.governance.embassy.port.output.VisaRequestResponse visaRequest = visaService.createRequest(userId);
+        HttpClientVisaRequestResponse visaRequest = visaService.createRequest(userId);
 
         return ok(VisaRequestResponse.builder()
                 .ticketId(visaRequest.getTicketId())

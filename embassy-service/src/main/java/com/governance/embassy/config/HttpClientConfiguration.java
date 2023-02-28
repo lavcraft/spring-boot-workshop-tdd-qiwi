@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class HttpClientConfiguration {
     @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+    public RestTemplate visaAgentHttpClient(RestTemplateBuilder restTemplateBuilder) {
         return restTemplateBuilder
                 .build();
     }

@@ -1,8 +1,9 @@
 package com.governance.embassy.service;
 
-import com.governance.embassy.port.input.VisaStatusResponse;
-import com.governance.embassy.port.output.VisaRequestResponse;
+import com.governance.embassy.port.output.HttpClientVisaRequestResponse;
+import com.governance.embassy.port.output.HttpClientVisaStatusResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,20 +15,34 @@ public class VisaService {
     private final RestTemplate visaServiceRestTemplate;
     private final HttpClientProperties httpClientProperties;
 
-    public VisaRequestResponse createRequest(String userId) {
-        ResponseEntity<VisaRequestResponse> visaRequestResponseResponseEntity = visaServiceRestTemplate.postForEntity(httpClientProperties.getVisaAgentBaseEndpoint() + "/visa/request", VisaRequest.builder().userId(userId).build(), VisaRequestResponse.class);
+    public HttpClientVisaRequestResponse createRequest(String userId) {
+        ResponseEntity<HttpClientVisaRequestResponse> visaRequestResponseResponseEntity =
+                visaServiceRestTemplate.postForEntity(
+                httpClientProperties.getVisaAgentBaseEndpoint() + "/visa/request",
+                VisaRequest.builder().userId(userId).build(),
+                HttpClientVisaRequestResponse.class
+        );
 
-        VisaRequestResponse body = visaRequestResponseResponseEntity.getBody();
+        HttpClientVisaRequestResponse body = visaRequestResponseResponseEntity.getBody();
 
         return body;
     }
 
     @Cacheable("visa-status")
-    public VisaStatusResponse getStatus(String ticketId) {
-        ResponseEntity<VisaStatusResponse> visaRequestResponseResponseEntity = visaServiceRestTemplate.getForEntity(httpClientProperties.getVisaAgentBaseEndpoint() + "/visa/status?ticketId="+ ticketId, VisaStatusResponse.class);
+    public HttpClientVisaStatusResponse getStatus(String ticketId) {
+        ResponseEntity<HttpClientVisaStatusResponse> visaRequestResponseResponseEntity =
+                visaServiceRestTemplate.getForEntity(
+                httpClientProperties.getVisaAgentBaseEndpoint() + "/visa/status?ticketId=" + ticketId,
+                HttpClientVisaStatusResponse.class
+        );
 
-        VisaStatusResponse body = visaRequestResponseResponseEntity.getBody();
+        HttpClientVisaStatusResponse body = visaRequestResponseResponseEntity.getBody();
 
         return body;
+    }
+
+    @CacheEvict("visa-status")
+    public void evictStatus(String ticketId) {
+
     }
 }
