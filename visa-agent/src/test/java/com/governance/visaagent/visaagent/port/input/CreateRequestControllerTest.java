@@ -2,7 +2,7 @@ package com.governance.visaagent.visaagent.port.input;
 
 
 import com.governance.visaagent.visaagent.dal.VisaRequest;
-import com.governance.visaagent.visaagent.dal.VisaRequestRepository;
+import com.governance.visaagent.visaagent.service.VisaService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,18 +17,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest
 public class CreateRequestControllerTest {
-    @Autowired MockMvc               mockMvc;
-    @MockBean  VisaRequestRepository visaRequestRepository;
+    @Autowired MockMvc     mockMvc;
+    @MockBean  VisaService visaService;
 
     @Test
     void should_create_request_and_return_tickedId() throws Exception {
-        when(visaRequestRepository.save(any()))
-                .thenReturn(
-                        VisaRequest.builder()
-                                   .id(100L)
-                                   .userId("U-100")
-                                   .build()
-                );
+        when(visaService.createRequest(any()))
+                .thenReturn(100L);
 
         mockMvc.perform(get("/visa/request?userId=U-100"))
                .andExpect(status().isOk())

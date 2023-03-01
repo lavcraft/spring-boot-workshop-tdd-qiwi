@@ -8,6 +8,9 @@ CREATE TABLE visa_request
     CONSTRAINT pk_visarequest PRIMARY KEY (id)
 );
 
+INSERT INTO visa_request
+VALUES (10, 'U-100', 'processing');
+
 CREATE FUNCTION AddData() RETURNS INTEGER
 AS
 $$

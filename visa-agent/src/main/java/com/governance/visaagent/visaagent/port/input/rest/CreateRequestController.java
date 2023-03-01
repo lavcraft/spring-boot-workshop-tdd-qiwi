@@ -1,7 +1,7 @@
 package com.governance.visaagent.visaagent.port.input.rest;
 
 import com.governance.visaagent.visaagent.dal.VisaRequest;
-import com.governance.visaagent.visaagent.dal.VisaRequestRepository;
+import com.governance.visaagent.visaagent.service.VisaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,16 +15,14 @@ import static org.springframework.http.ResponseEntity.ok;
 @RequestMapping("/visa")
 @RequiredArgsConstructor
 public class CreateRequestController {
-    private final VisaRequestRepository visaRequestRepository;
+    private final VisaService visaService;
 
     @GetMapping("/request")
     public ResponseEntity<VisaCreateRequestResponse> createRequest(@RequestParam String userId) {
-        VisaRequest entity = visaRequestRepository.save(VisaRequest.builder()
-                                                                   .userId(userId)
-                                                                   .build());
+        Long id = visaService.createRequest(userId);
         return ok(
                 VisaCreateRequestResponse.builder()
-                                         .ticketId(entity.getId().toString())
+                                         .ticketId(id.toString())
                                          .build()
         );
     }

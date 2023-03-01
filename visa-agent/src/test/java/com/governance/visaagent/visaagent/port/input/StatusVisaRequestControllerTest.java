@@ -2,6 +2,7 @@ package com.governance.visaagent.visaagent.port.input;
 
 import com.governance.visaagent.visaagent.dal.VisaRequest;
 import com.governance.visaagent.visaagent.dal.VisaRequestRepository;
+import com.governance.visaagent.visaagent.service.VisaService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -19,11 +20,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 public class StatusVisaRequestControllerTest {
     @Autowired MockMvc               mockMvc;
-    @MockBean  VisaRequestRepository visaRequestRepository;
+    @MockBean VisaService visaService;
+
 
     @Test
     void should_return_status_b_ticketId() throws Exception {
-        when(visaRequestRepository.findById(100L))
+        when(visaService.findById(100L))
                 .thenReturn(
                         Optional.of(
                                 VisaRequest.builder()
@@ -42,7 +44,7 @@ public class StatusVisaRequestControllerTest {
 
     @Test
     void should_return_404_when_ticket_not_found() throws Exception {
-        when(visaRequestRepository.findById(101L))
+        when(visaService.findById(101L))
                 .thenReturn(
                         Optional.empty()
                 );
