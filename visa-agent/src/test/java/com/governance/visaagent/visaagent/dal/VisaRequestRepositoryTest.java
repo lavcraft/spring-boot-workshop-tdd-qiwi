@@ -1,16 +1,20 @@
 package com.governance.visaagent.visaagent.dal;
 
+import com.governance.visaagent.visaagent.util.GoodDataJpaTest;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
+@GoodDataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class VisaRequestRepositoryTest {
     @Autowired VisaRequestRepository visaRequestRepository;
@@ -59,5 +63,25 @@ class VisaRequestRepositoryTest {
         assertThat(requests).hasSize(2);
         assertThat(requests.get(0).getStatus()).isEqualTo("processing");
         assertThat(requests.get(1).getStatus()).isEqualTo("processing");
+    }
+
+    @Test
+    void should_update_status_field() {
+        //given
+        VisaRequest entity = visaRequestRepository.save(
+                VisaRequest.builder()
+                           .userId("U-1")
+                           .status("processing")
+                           .build()
+        );
+
+        //when
+        visaRequestRepository.updateStatusById("failed", entity.getId());
+
+        //then
+        Optional<VisaRequest> newEntity = visaRequestRepository.findById(entity.getId());
+
+        assertThat(newEntity).isPresent();
+        assertThat(newEntity.get().getStatus()).isEqualTo("failed");
     }
 }

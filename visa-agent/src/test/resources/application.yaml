@@ -1,1 +1,12 @@
 #spring.datasource.url: jdbc:tc:postgresql:15.2-alpine:///databasename?TC_REUSABLE=true
+
+spring:
+    kafka:
+        consumer:
+            auto-offset-reset: earliest
+#            value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+#            properties:
+#                spring:
+#                    json:
+#                        trusted:
+#                            packages: '*'

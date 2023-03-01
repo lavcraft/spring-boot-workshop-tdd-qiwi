@@ -2,14 +2,13 @@ package com.governance.visaagent.visaagent.service;
 
 import com.governance.visaagent.visaagent.dal.VisaRequest;
 import com.governance.visaagent.visaagent.dal.VisaRequestRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.kafka.core.KafkaTemplate;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -20,8 +19,9 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class VisaServiceTest {
-    @InjectMocks VisaService           visaService;
-    @Mock        VisaRequestRepository visaRequestRepository;
+    @InjectMocks VisaService                   visaService;
+    @Mock        VisaRequestRepository         visaRequestRepository;
+    @Mock        KafkaTemplate<String, String> kafkaTemplate;
 
     @Test
     void should_return_old_visa_request_when_user_has_one_in_processing_status() {
@@ -41,6 +41,7 @@ public class VisaServiceTest {
                 visaRequestRepository,
                 times(0)
         ).save(any());
+        verifyNoInteractions(kafkaTemplate);
         assertThat(ticketId).isEqualTo(100L);
     }
 
@@ -62,6 +63,12 @@ public class VisaServiceTest {
         Long ticketId = visaService.createRequest("U-100");
 
         //then
+        verify(kafkaTemplate).send(
+                "visa.requests",
+                "U-100",
+                "100"
+        );
+
         assertThat(ticketId).isEqualTo(100L)
                             .describedAs("Ticket id should be 100L after save");
     }
@@ -74,11 +81,11 @@ public class VisaServiceTest {
                         VisaRequest.builder()
                                    .userId("U-100")
                                    .status("processing")
-                                .build(),
+                                   .build(),
                         VisaRequest.builder()
                                    .userId("U-100")
                                    .status("processing")
-                                .build()
+                                   .build()
                 ));
 
         //expect
