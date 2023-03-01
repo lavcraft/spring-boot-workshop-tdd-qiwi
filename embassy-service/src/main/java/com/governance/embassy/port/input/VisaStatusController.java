@@ -32,12 +32,12 @@ public class VisaStatusController {
         );
     }
 
-    @ControllerAdvice
-    public static class HandleErrorAdvice {
+//    @ControllerAdvice
+//    public static class HandleErrorAdvice {
         @ExceptionHandler(RuntimeException.class)
         public ResponseEntity<VisaStatusResponse> visaStatusResponseResponseEntity() {
             return ResponseEntity.internalServerError()
                                  .body(VisaStatusResponse.builder().status("unknown").build());
         }
-    }
+//    }
 }

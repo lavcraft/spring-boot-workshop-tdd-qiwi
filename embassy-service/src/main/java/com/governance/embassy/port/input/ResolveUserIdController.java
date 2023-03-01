@@ -4,10 +4,7 @@ import com.governance.embassy.model.UserInfo;
 import com.governance.embassy.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -19,8 +16,16 @@ public class ResolveUserIdController {
     public ResponseEntity<UserIdResponse> userIdResponseResponseEntity(@RequestBody UserInfo userInfo) {
         String userId = service.resolveUserId(userInfo);
 
-        return ResponseEntity.ok(UserIdResponse.builder()
-                                               .userId(userId)
-                                               .build());
+        return ResponseEntity.ok(
+                UserIdResponse.builder()
+                              .userId(userId)
+                              .build()
+        );
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<VisaStatusResponse> visaStatusResponseResponseEntity() {
+        return ResponseEntity.badRequest()
+                             .body(VisaStatusResponse.builder().status("invalid input").build());
     }
 }
